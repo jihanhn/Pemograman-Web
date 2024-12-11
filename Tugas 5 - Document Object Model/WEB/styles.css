@@ -1,0 +1,50 @@
+body {
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: yellow;
+}
+
+.top-flowers {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.flower-img {
+    width: 150px;
+    height: 150px;
+    cursor: pointer;
+    border: 2px solid #333;
+}
+
+.controls {
+    margin: 20px 0;
+}
+
+button {
+    padding: 10px 20px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.flower-basket {
+    border: 2px solid black;
+    padding: 20px;
+    min-height: 200px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+#basket img {
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+#basket img:hover {
+    transform: scale(1.1);
+}

@@ -1,0 +1,281 @@
+body {
+  font-family: 'Times New Roman', Times, serif;
+  margin: 0;
+  overflow: hidden;
+}
+
+/* wave */
+.inner-header  h1 {
+  font-family: 'Lato', sans-serif;
+  font-weight:300;
+  letter-spacing: 2px;
+  font-size:48px;
+}
+
+
+header {
+  position:relative;
+  text-align:center;
+  background: -webkit-linear-gradient(to right, #c298b2, #c789a7);
+  background: linear-gradient(to right, #c68ea4, #bf7a9b);
+  /* color:white; */
+}
+.logo {
+  width:50px;
+  fill:white;
+  padding-right:15px;
+  display:inline-block;
+  vertical-align: middle;
+}
+
+.inner-header {
+  height:65vh;
+  width:100%;
+  margin: 0;
+  padding: 0;
+}
+
+.flex { /*Flexbox for containers*/
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.waves {
+  position:relative;
+  width: 100%;
+  height:15vh;
+  margin-bottom:-7px; 
+  min-height:100px;
+  max-height:150px;
+}
+
+.content {
+  position: relative;
+  height: 20vh;
+  text-align: center;
+  background: transparent; 
+}
+
+
+/* Animation */
+
+.parallax > use {
+  animation: move-forever 25s cubic-bezier(.55,.5,.45,.5)infinite;
+}
+.parallax > use:nth-child(1) {
+  animation-delay: -2s;
+  animation-duration: 7s;
+}
+.parallax > use:nth-child(2) {
+  animation-delay: -3s;
+  animation-duration: 10s;
+}
+.parallax > use:nth-child(3) {
+  animation-delay: -4s;
+  animation-duration: 13s;
+}
+.parallax > use:nth-child(4) {
+  animation-delay: -5s;
+  animation-duration: 20s;
+}
+@keyframes move-forever {
+  0% {
+   transform: translate3d(-90px,0,0);
+  }
+  100% { 
+    transform: translate3d(85px,0,0);
+  }
+}
+@media (max-width: 768px) {
+  .waves {
+    height:40px;
+    min-height:40px;
+  }
+  .content {
+    height:30vh;
+  }
+  h1 {
+    font-size:24px;
+  }
+}
+
+/* Gaya untuk Navbar */
+ nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 2;
+  font-family: Arial, Helvetica, sans-serif;
+  background-image: linear-gradient(to right, #c68ea4, #bf7a9b);
+}
+
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: left; /* Align the navbar to the left */
+}
+
+nav ul li {
+  padding: 10px 20px;
+}
+
+nav ul li a {
+  display: block;
+  color: black;
+  text-align: center;
+  padding: 14px 20px;
+  text-decoration: none;
+}
+
+nav ul li a:hover {
+  background-color: palevioletred;
+  color: whitesmoke;
+}
+
+/* Section styling */
+.page {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 50px; /* Adjust to navbar height */
+  transition: transform 0.8s ease-in-out;
+}
+
+/* Set positions for transitions */
+#one:target ~ #one,
+#two:target ~ #two {
+  transform: translateX(0);
+}
+
+#two {
+  transform: translateX(100vw);
+  background: -webkit-linear-gradient(to right, #c298b2, #c789a7);
+  background: linear-gradient(to right, #c68ea4, #bf7a9b);
+}
+
+/* Gaya untuk kontainer */
+.container {
+  text-align: left;
+  margin: 0 auto;
+  padding: 2% 2% 0 2%;
+}
+
+/* Gaya untuk kontainer informasi perkuliahan */
+.container1 {
+  text-align: center;
+  padding: 7% 2% 0% 2%;
+}
+
+/* Card styling */
+.card {
+  background-color: white; /* White background for the card */
+  padding: 2%; /* Padding inside the card */
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3); /* Floating effect */
+  text-align: center; /* Center text within the card */
+  max-width: 800px; /* Maximum width for the card */
+  margin: 7% auto; /* Center the card */
+  position: relative; /* Needed for absolute positioning of social icons */
+  transition: transform 0.3s; /* Smooth scale effect */
+}
+
+.card:hover {
+  transform: translateY(-5px); 
+}
+
+/* Nama */
+.nama {
+  font-size: 2.5em;
+  margin-bottom: 10px;
+}
+
+/* foto */
+.profil-image {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%; 
+  object-fit: cover;
+  margin-top: 20px;
+  border: 2px solid pink;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5); 
+}
+
+/* medsos */
+.medsos {
+  display: flex;
+  justify-content: center; 
+  margin-top: 10px; 
+}
+
+.medsos a {
+  width: 60px;
+  height: 60px;
+  position: relative;
+  display: block;
+  font-size: 30px;
+  text-align: center;
+  color: pink;
+  background-color: white;
+  line-height: 60px;
+  margin: 0 15px;
+  border-radius: 50%; 
+  box-shadow: 0 5px 4px rgba(0, 0, 0, 0.5); 
+  transition: 0.5s ease;
+}
+
+.medsos a:hover {
+  color: white;
+  transform: translate(0, -5px); }
+
+.medsos a:nth-child(1):hover {
+  background-image: linear-gradient(to right, #833ab4, #fd1d1d, #fcb045);
+}
+
+.medsos a:nth-child(2):hover {
+  background-color: black;
+}
+
+.medsos a:nth-child(3):hover {
+  background-color: palevioletred;
+}
+
+/* mata kulia */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  padding-top: 10px;
+  background-color: rgb(235, 182, 191);
+}
+
+table,
+th,
+td {
+  border: 3px solid #000;
+}
+
+th,
+td {
+  padding: 10px;
+  text-align: left;
+}
+
+th {
+  background-color: palevioletred;
+  color: white;
+}
+
+/* biodata */
+.biodata {
+  margin-top: 15px; 
+  font-size: 1em; 
+}
+.fakul{
+  text-align: center;
+  
+}
+
