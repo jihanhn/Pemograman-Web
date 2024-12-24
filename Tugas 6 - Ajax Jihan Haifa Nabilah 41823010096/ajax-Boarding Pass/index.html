@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boarding Pass</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Toastr CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            padding: 20px;
+        }
+        table {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2 class="text-center">Boarding Pass</h2>
+    <button class="btn btn-success mb-3" data-toggle="modal" data-target="#add-passenger-modal">Add Passenger</button>
+
+    <!-- Passenger Table -->
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Flight ID</th>
+                <th>Airline</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data will be populated by JavaScript -->
+        </tbody>
+    </table>
+</div>
+
+<!-- Add Passenger Modal -->
+<div class="modal fade" id="add-passenger-modal" tabindex="-1" aria-labelledby="add-passenger-modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="add-passenger-modalLabel">Add Passenger</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="add-passenger-form">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="flight_id">Flight ID</label>
+                        <input type="text" class="form-control" id="flight_id" name="flight_id" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="airline">Airline</label>
+                        <input type="text" class="form-control" id="airline" name="airline" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Passenger</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Passenger Modal -->
+<div class="modal fade" id="edit-passenger-modal" tabindex="-1" aria-labelledby="edit-passenger-modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="edit-passenger-modalLabel">Edit Passenger</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-passenger-form">
+                    <input type="hidden" id="edit-id" name="id">
+                    <div class="form-group">
+                        <label for="edit-name">Name</label>
+                        <input type="text" class="form-control" id="edit-name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-flight-id">Flight ID</label>
+                        <input type="text" class="form-control" id="edit-flight-id" name="flight_id" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-airline">Airline</label>
+                        <input type="text" class="form-control" id="edit-airline" name="airline" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update Passenger</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<!-- Toastr JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<script>
+// Document Ready function
+$(document).ready(function () {
+    // Load passengers data
+    function loadPassengers() {
+        $.ajax({
+            url: "api/getPassengers.php",
+            type: "GET",
+            success: function (response) {
+                let tbody = "";
+                response.data.forEach(passenger => {
+                    tbody += `
+                        <tr>
+                            <td>${passenger.name}</td>
+                            <td>${passenger.flight_id}</td>
+                            <td>${passenger.airline}</td>
+                            <td>
+                                <button class="btn btn-primary btn-edit" 
+                                    data-id="${passenger.id}" 
+                                    data-name="${passenger.name}" 
+                                    data-flight_id="${passenger.flight_id}" 
+                                    data-airline="${passenger.airline}">
+                                    Edit
+                                </button>
+                                <button class="btn btn-danger btn-delete" data-id="${passenger.id}">Delete</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                $("tbody").html(tbody);
+            }
+        });
+    }
+
+    loadPassengers();
+
+    // Add passenger
+    $("#add-passenger-form").on("submit", function (e) {
+        e.preventDefault();
+        const formData = $(this).serialize();
+
+        $.ajax({
+            url: "api/addPassenger.php",
+            type: "POST",
+            data: formData,
+            success: function (response) {
+                if (response.success) {
+                    toastr.success("Passenger added successfully");
+                    $("#add-passenger-modal").modal("hide");
+                    loadPassengers();
+                } else {
+                    toastr.error(response.message || "Failed to add passenger");
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX error: ", status, error);
+                toastr.error("An error occurred while adding the passenger.");
+            }
+        });
+    });
+
+    // Edit passenger
+    $(document).on("click", ".btn-edit", function () {
+        const id = $(this).data("id");
+        const name = $(this).data("name");
+        const flight_id = $(this).data("flight_id");
+        const airline = $(this).data("airline");
+
+        $("#edit-id").val(id);
+        $("#edit-name").val(name);
+        $("#edit-flight-id").val(flight_id);
+        $("#edit-airline").val(airline);
+
+        $("#edit-passenger-modal").modal("show");
+    });
+
+    $("#edit-passenger-form").on("submit", function (e) {
+        e.preventDefault();
+        const formData = $(this).serialize();
+
+        $.ajax({
+            url: "api/updatePassenger.php",
+            type: "POST",
+            data: formData,
+            success: function (response) {
+                if (response.success) {
+                    toastr.success("Passenger updated successfully");
+                    $("#edit-passenger-modal").modal("hide");
+                    loadPassengers();
+                } else {
+                    toastr.error(response.message || "Failed to update passenger");
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX error: ", status, error);
+                toastr.error("An error occurred while updating the passenger.");
+            }
+        });
+    });
+
+    // Delete passenger
+    $(document).on("click", ".btn-delete", function () {
+        const id = $(this).data("id");
+
+        if (confirm("Are you sure you want to delete this passenger?")) {
+            $.ajax({
+                url: "api/deletePassenger.php",
+                type: "POST",
+                data: { id: id },
+                success: function (response) {
+                    if (response.success) {
+                        toastr.success("Passenger deleted successfully");
+                        loadPassengers();
+                    } else {
+                        toastr.error(response.message || "Failed to delete passenger");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("AJAX error: ", status, error);
+                    toastr.error("An error occurred while deleting the passenger.");
+                }
+            });
+        }
+    });
+});
+</script>
+
+</body>
+</html>
